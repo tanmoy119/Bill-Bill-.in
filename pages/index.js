@@ -14,7 +14,7 @@ export default function Home() {
   return (<>
   <Cointainer style={{backgroundImage: "url('img/img1.jpg')"}}>
     <Navbar/>
-    <div className="md:backdrop-blur-sm w-full h-[873px] clip-your-needful-styles mt-[64px] ">
+    <div className="md:backdrop-blur-sm w-full md:h-[873px] sm:h-full clip-your-needful-styles mt-[64px] ">
     </div>
     <h1 className="absolute top-[50%] left-[30%] text-white text-4xl  " ><span>Make Your buisness </span><span className="text-[#86efac]">
           {text}

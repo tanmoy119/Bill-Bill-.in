@@ -19,7 +19,7 @@ const Navbar = () => {
     <div className="md:flex items-center justify-between  py-4  text-black">
         <div className="font-bold text-2xl cursor-pointer flex items-center font-[poppins] text-gray-800">
             <span className="text-3xl text-indigo-600 mr-1 pt-2"></span>
-            <span className='text-green-300 backdrop-blur-lg pl-10'>Bill Bill</span>
+            <span className='text-green-300  pl-10'>Bill Bill</span>
         </div>
         <div onClick={()=>setOpen(!open)} className=" absolute right-8 top-5 cursor-pointer md:hidden">
         {open?<CloseIcon sx={{ fontSize: 27, color:"gray" }}/>:<MenuIcon sx={{ fontSize: 27, color:"gray" }}/>}
