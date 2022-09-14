@@ -1,15 +1,20 @@
 import { useState } from "react";
+import Navbar from "../components/Navbar";
 import Popup from "../components/Popup";
 import Sell from "../components/Sell";
+import Sidebar from "../components/Sidebar";
 
 const Dashboard = () => {
   const [openPopup,setOpenPopup] = useState(false);
-  return (<>
-    <div onClick={()=>setOpenPopup(true)} className="cursor-pointer">Dashboard</div>
+  
+  return (<div className="h-screen"  style={{backgroundColor:"#1b203d"}}>
+    <Navbar className="z-10"/>
+    <Sidebar openPopup={openPopup} setOpenPopup={setOpenPopup} className="z-[-1]"/>
+    
     <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} >
-        <Sell/>
+        <Sell openPopup={openPopup} setOpenPopup={setOpenPopup}/>
     </Popup>
-    </>
+    </div>
   )
 }
 
