@@ -7,68 +7,35 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Stack from '@mui/material/Stack';
 
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+
 var i ;
 const TAX_RATE = 0.07;
 
 const top100Films = [
-    { title: 'The Shawshank Redemption', year: 1994 },
+    { title: 'Bulb-9wat(Anchore)', year: 90 },
+    { title: 'Bulb-5wat(Anchore)', year: 80 },
+    { title: 'Bulb-12wat(Anchore)', year: 120 },
     { title: 'The Godfather', year: 1972 },
     { title: 'The Godfather: Part II', year: 1974 },
     { title: 'The Dark Knight', year: 2008 },
     { title: '12 Angry Men', year: 1957 },
+    { title: 'Bulb-40wat(Anchore)', year: 450 },
     { title: "Schindler's List", year: 1993 },
     { title: 'Pulp Fiction', year: 1994 },
     { title: 'The Great Dictator', year: 1940 },
     { title: 'Cinema Paradiso', year: 1988 },
     { title: 'The Lives of Others', year: 2006 },
     { title: 'Grave of the Fireflies', year: 1988 },
-    { title: 'Paths of Glory', year: 1957 },
-    { title: 'Django Unchained', year: 2012 },
-    { title: 'The Shining', year: 1980 },
-    { title: 'WALL·E', year: 2008 },
-    { title: 'American Beauty', year: 1999 },
-    { title: 'The Dark Knight Rises', year: 2012 },
-    { title: 'Princess Mononoke', year: 1997 },
-    { title: 'Aliens', year: 1986 },
-    { title: 'Oldboy', year: 2003 },
-    { title: 'Once Upon a Time in America', year: 1984 },
-    { title: 'Witness for the Prosecution', year: 1957 },
-    { title: 'Das Boot', year: 1981 },
-    { title: 'Citizen Kane', year: 1941 },
-    { title: 'North by Northwest', year: 1959 },
-    { title: 'Vertigo', year: 1958 },
-    { title: 'Reservoir Dogs', year: 1992 },
-    { title: 'Braveheart', year: 1995 },
-    { title: 'M', year: 1931 },
-    { title: 'Requiem for a Dream', year: 2000 },
-    { title: 'Amélie', year: 2001 },
-    { title: 'A Clockwork Orange', year: 1971 },
-    { title: 'Like Stars on Earth', year: 2007 },
-    { title: 'Taxi Driver', year: 1976 },
-    { title: 'Lawrence of Arabia', year: 1962 },
-    { title: 'Double Indemnity', year: 1944 },
-    { title: 'Amadeus', year: 1984 },
-    { title: 'To Kill a Mockingbird', year: 1962 },
-    { title: 'Toy Story 3', year: 2010 },
-    { title: 'Logan', year: 2017 },
-    { title: 'Full Metal Jacket', year: 1987 },
-    { title: 'Dangal', year: 2016 },
-    { title: 'The Sting', year: 1973 },
-    { title: '2001: A Space Odyssey', year: 1968 },
-    { title: "Singin' in the Rain", year: 1952 },
-    { title: 'Toy Story', year: 1995 },
-    { title: 'Bicycle Thieves', year: 1948 },
-    { title: 'The Kid', year: 1921 },
-    { title: 'Inglourious Basterds', year: 2009 },
-    { title: 'Snatch', year: 2000 },
-    { title: '3 Idiots', year: 2009 },
-    { title: 'Monty Python and the Holy Grail', year: 1975 },
+    { title: 'Nat-12', year: 1957 } 
   ];
 
 
 
 
-const Sell = () => {
+const Sell = (props) => {
+  const {openPopup,setOpenPopup }= props;
   const [value, setValue] = useState(null);
   const [row, setRow] = useState([]);
   const [data,setData] = React.useState({
@@ -79,6 +46,16 @@ const Sell = () => {
     tax:'',
     mtotal:''
   })
+
+  const [userData,setUserData] = useState({
+    name:"",
+    email:"",
+    number:"",
+    address:"",
+    referral:"",
+    paidamount:"0",
+    status:""
+  })
     const defaultProps = {
         options: top100Films,
         getOptionLabel: (option) => option.title,
@@ -88,12 +65,27 @@ const Sell = () => {
         options: top100Films.map((option) => option.title),
       };
     
-      const addArr = ()=>{
+      const addArr = (e)=>{
+        e.preventDefault();
         setRow((p)=>{
             return [
                 ...p,{title:'',qty:'',price:'',discount:'',amount:''}
             ]
         });
+    }
+
+    const removeRow = (e)=>{
+      e.preventDefault();
+     // console.log(n);
+      console.log(row);
+      //const array = row;
+      row.pop();
+      setRow(()=>{
+        
+        return[...row];
+      })
+       console.log(...row);
+      
     }
 
     const inputEvent = (e,n)=>{
@@ -107,7 +99,7 @@ const Sell = () => {
       setData((prevalue)=>{
           row[n][name] = prevalue[name]
           row[n].amount =(row[n].price*row[n].qty)-(row[n].price*row[n].qty)*row[n].discount/100
-          console.log(row[n].amount);
+         // console.log(row[n].amount);
          return {
           ...prevalue,
           [name]:value
@@ -117,20 +109,28 @@ const Sell = () => {
 
           setTotal(()=>{
             function ccyFormat(num) {
-              return `${num.toFixed(2)}`;
+        
+              //console.log(num);
+              if (num!=0) {
+               var value= num.toFixed(2);
+                return value;
+              }
+              return num;
             }
             
                 function subtotal(items) {
                   return items.map((c) => c.amount).reduce((sum, i) => sum + i, 0);
                   
                 }
+               // console.log(row);
               const invoiceSubtotal = subtotal(row);
               const invoiceTaxes = TAX_RATE * invoiceSubtotal;
               const invoiceTotal = invoiceTaxes + invoiceSubtotal;
+             // console.log(invoiceSubtotal);
               const stotal= ccyFormat(invoiceSubtotal);
               const tax =   ccyFormat(invoiceTaxes);
               const mtotal= ccyFormat(invoiceTotal);
-              console.log(invoiceSubtotal);
+             // console.log(stotal);
             return{
             stotal:stotal,
             tax:tax,
@@ -138,10 +138,93 @@ const Sell = () => {
           }
             });
     }
+
+    const inputEvent2 = (R)=>{
+    
+      const {name,value} = R.target;
+    
+      setUserData((prevalue)=>{
+        
+        //console.log(prevalue);
+        return {
+            ...prevalue,
+            [name]: value
   
-  return (
+        };
+      })
+  
+      setUserData((pv)=>{
+       // console.log(pv);
+        let status="-"
+      
+        
+        if (pv.paidamount==total.mtotal) {
+          status="Paid";
+           
+  
+        }else if (pv.paidamount==0) {
+          status="Due";
+           
+  
+        } else {
+          status="Pending";
+        }
+  
+        return {
+          ...pv,
+          [name]: value,
+          status:status
+  
+      };
+      })
+    }
+
+
+
+   // console.log(total);
+  
+  return (<>
+    <Form >
+    <div className='flex m-4'>
+      <div className="mr-3">
+      <div className="">
+        <label className=''>
+          Name
+        </label>
+        <input type="text"  name='name' value={userData.name} onChange={inputEvent2}  placeholder='Name' className='rounded-md px-4 py-2 mt-2 outline-none w-full border-2 border-gray-400' />
+      </div>
+      <div className="">
+        <label className=''>
+          Email
+        </label>
+        <input type="email"  name='email' value={userData.email} onChange={inputEvent2}  placeholder='Email' className='rounded-md px-4 py-2 mt-2 outline-none w-full border-2 border-gray-400' />
+      </div>
+      <div className="">
+        <label className=''>
+          Phone Number
+        </label>
+        <input type="number"  name='number' value={userData.number} onChange={inputEvent2}  placeholder='Phone Number' className='num rounded-md px-4 py-2 mt-2 outline-none  w-full border-2 border-gray-400 appearance-none' />
+      </div>
+      </div>
+      <div className="w-[400px] ">
+        <div className="">
+        <label className=''>
+          Address
+        </label>
+        <textarea type="text"  name='address' value={userData.address} onChange={inputEvent2}  placeholder='Address' className='rounded-md px-4 py-2 mt-2 outline-none  w-full h-[120px] border-2 border-gray-400 appearance-none' />
+        </div>
+        <div className="">
+        <label className=''>
+        Referral
+        </label>
+        <input type="text"  name='referral' value={userData.referral} onChange={inputEvent2}  placeholder='Referral Name or Number' className='rounded-md px-4 py-2 mt-2 outline-none  w-full border-2 border-gray-400 appearance-none' />
+          
+        </div>
+      </div>
+    </div>
     <Tablecontainer component={Paper}>
-      <button onClick={addArr} >add</button>
+    <PlaylistAddIcon onClick={addArr} className="cursor-pointer "/>
+    <DeleteSweepIcon onClick={(e)=> removeRow(e)} className='text-green-400 cursor-pointer'/>
     <Table sx={{ minWidth: 700 }} aria-label="simple">
         <TableHead >
             <TableRow style={{backgroundColor:"#f1f4f8" }} >
@@ -172,10 +255,10 @@ const Sell = () => {
         onChange={(event, newValue) => {
           setValue(newValue);
           setValue((prevalue)=>{
-            console.log(row);
-            console.log(newValue);
+            
             row.title = (newValue)? newValue.title:""
             row.price = (newValue)? newValue.year:""
+           // row.qty = 0
            return {
             ...prevalue
            }
@@ -193,7 +276,9 @@ const Sell = () => {
       <TableCell ><span className='Rprice'>{row.price}</span></TableCell>
       <TableCell ><input style={{color:'#7e0505'}} maxlength="100" className='qtyInput' type='number' name='discount' value={row.discount} onChange={(e)=> inputEvent(e,n)}/>%</TableCell>
       <TableCell >{row.amount}</TableCell>
-
+      <div className="icon">
+      {/* <button style={{border:"none",backgroundColor:"transparent"}} onClick={(e)=> removeRow(e,n)} ><DeleteSweepIcon className='D'/></button> */}
+      </div>
             </TableRow>
              ))}
 
@@ -216,10 +301,44 @@ const Sell = () => {
 
     </Table>
 </Tablecontainer>
+<button className="btn" onClick={(e)=>{e.preventDefault(), setOpenPopup(false)}}>CANCEL</button>
+<div className='flex m-4 pl-[1000px]'>
+      <div className="mr-3">
+      <div className="">
+        <label className=''>
+        Paid amount
+        </label>
+        <input type="number" name='paidamount' value={userData.paidamount} onChange={inputEvent2} placeholder='Paid amount'  max={total.mtotal} className='num rounded-md px-4 py-2 mt-2 outline-none w-full border-2 border-gray-400' />
+      </div>
+      <div className="">
+        <label className=''>
+          Email
+        </label>
+        <input type="email" placeholder='Email' className='rounded-md px-4 py-2 mt-2 outline-none w-full border-2 border-gray-400' />
+      </div>
+      <div className="">
+        <label className='bg-green-500'>
+          {userData.status}
+        </label>
+        </div>
+      </div>
+  
+    </div>
+    <button type='submit'>Submit</button>
+</Form>
+</>
   )
 }
 
 export default Sell;
+
+const Form = styled.form`
+.num::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+`
 
 const Tablecontainer = styled(TableContainer)`
 

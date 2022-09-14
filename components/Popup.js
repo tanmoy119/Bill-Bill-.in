@@ -20,7 +20,7 @@ function Popup(props) {
         <DialogC>
           
           {children}
-          <button className="btn" onClick={()=>{setOpenPopup(false)}}>CANCEL</button>
+          {/* <button className="btn" onClick={()=>{setOpenPopup(false)}}>CANCEL</button> */}
           
         </DialogC>
         
@@ -45,7 +45,7 @@ const DialogC=styled(DialogContent)`
   position: absolute;
   left:280px;
   bottom: 45px;
-  cursor: pointer;
+  //cursor: pointer;
 }
 
 `
