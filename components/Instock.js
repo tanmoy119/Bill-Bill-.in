@@ -293,7 +293,7 @@ export default function EnhancedTable() {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rowdata.length) : 0;
 
   return (
     <Box sx={{ width: '1500px', height:"100%" }} className="bg-[#272c4a] ">
