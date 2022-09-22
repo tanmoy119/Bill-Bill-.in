@@ -66,7 +66,7 @@ const Addstock = () => {
 
   const notifySuccess = () =>{
     toast.success('Iten added Successfully', {
-      position: "top-left",
+      position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -77,7 +77,7 @@ const Addstock = () => {
   }
   const notifyError = (err) =>{
     toast.error(err, {
-      position: "top-left",
+      position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -138,7 +138,7 @@ const Addstock = () => {
       </form>
       
     </Main>
-    <ToastContainer/>
+    <ToastContainer className="z-10"/>
     </>
   )
 }
