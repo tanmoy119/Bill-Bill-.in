@@ -30,13 +30,14 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import axios from 'axios';
 
-function createData(name, calories, fat, carbs, protein) {
+function createData(name, quantity, buyingPrice, sellingPrice, protein) {
   return {
     name,
-    calories,
-    fat,
-    carbs,
+    quantity,
+    buyingPrice,
+    sellingPrice,
     protein,
   };
 }
@@ -95,29 +96,23 @@ const headCells = [
     label: 'Item Name',
   },
   {
-    id: 'calories',
+    id: 'quantity',
     numeric: true,
     disablePadding: false,
     label: 'Quantity',
   },
   {
-    id: 'fat',
+    id: 'buyingPrice',
     numeric: true,
     disablePadding: false,
     label: 'Buying Price',
   },
   {
-    id: 'carbs',
+    id: 'sellingPrice',
     numeric: true,
     disablePadding: false,
     label: 'Selling Price',
-  },
-  {
-    id: 'protein',
-    numeric: true,
-    disablePadding: false,
-    label: 'Protein ',
-  },
+  }
 ];
 
 function EnhancedTableHead(props) {
@@ -235,13 +230,27 @@ EnhancedTableToolbar.propTypes = {
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  const [orderBy, setOrderBy] = React.useState('quantity');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(12);
+  const url="https://billbil-api.herokuapp.com/app/v1/add/item"
+  const [rowdata,setRowData] = React.useState([]);
+  
+  React.useEffect(()=>{
+    async function fetchData(){
+        const request = await axios.get(url);
+        console.log(request.data);
+        setRowData(request.data);
+        return request;
+    }
+
+    fetchData();
+}, [url]);
 
   const handleRequestSort = (event, property) => {
+    console.log(property);
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -249,7 +258,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.name);
+      const newSelected = rowdata.map((n) => n.name);
       setSelected(newSelected);
       return;
     }
@@ -311,12 +320,12 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={rowdata.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(rowdata, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
@@ -329,7 +338,7 @@ export default function EnhancedTable() {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row._id}
                       selected={isItemSelected}
                     >
                       <TableCell className='text-[14px] text-white' >
@@ -351,10 +360,9 @@ export default function EnhancedTable() {
                       >
                         {row.name}
                       </TableCell>
-                      <TableCell align="right" className='text-[14px] text-[#ff8340]'>{row.calories}</TableCell>
-                      <TableCell align="right" className='text-[14px] text-[#ff8340]'>{row.fat}</TableCell>
-                      <TableCell align="right" className='text-[14px] text-[#ff8340]'>{row.carbs}</TableCell>
-                      <TableCell align="right" className='text-[14px] text-[#ff8340]'>{row.protein}</TableCell>
+                      <TableCell align="right" className='text-[14px] text-[#ff8340]'>{row.quantity}-{(row.unit)?row.unit:""}</TableCell>
+                      <TableCell align="right" className='text-[14px] text-[#ff8340]'>{row.buyingPrice}</TableCell>
+                      <TableCell align="right" className='text-[14px] text-[#ff8340]'>{row.sellingPrice}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -373,7 +381,7 @@ export default function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={10}
           component="div"
-          count={rows.length}
+          count={rowdata.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

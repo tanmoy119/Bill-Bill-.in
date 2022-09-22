@@ -29,14 +29,15 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import axios from 'axios';
 
-function createData(name, calories, fat, carbs, protein) {
+function createData(name, mobileNumber, billAmount, date, status) {
   return {
     name,
-    calories,
-    fat,
-    carbs,
-    protein,
+    mobileNumber,
+    billAmount,
+    date,
+    status,
   };
 }
 
@@ -82,8 +83,8 @@ function stableSort(array, comparator) {
  //let array1=[];
  array.map((cl)=>{
     
-  const n = new Date(cl.carbs);
-  cl.carbs=n;
+  const n = new Date(cl.date);
+  cl.date=n;
   //array1.push(n);
   console.log(cl)
  })
@@ -102,7 +103,7 @@ function stableSort(array, comparator) {
   });
 
   stabilizedThis.map((cl)=>{
-    cl[0].carbs= new Date(cl[0].carbs).toUTCString();
+    cl[0].date= new Date(cl[0].date).toUTCString();
     console.log(cl);
   })
   
@@ -113,9 +114,9 @@ function stableSort(array, comparator) {
 
 const dateSort = ()=>{
 
-  rows.carbs.map((cl)=>{
+  rowdata.date.map((cl)=>{
     
-     const n = new Date(cl.carbs);
+     const n = new Date(cl.date);
      arr.push(n);
     // console.log(arr)
     })
@@ -138,25 +139,25 @@ const headCells = [
     label: 'Customer Name',
   },
   {
-    id: 'Mobile Number',
+    id: 'mobileNumber',
     numeric: true,
     disablePadding: false,
     label: 'Mobile Number',
   },
   {
-    id: 'fat',
+    id: 'billAmount',
     numeric: true,
     disablePadding: false,
     label: 'Bill Amount',
   },
   {
-    id: 'carbs',
+    id: 'date',
     numeric: true,
     disablePadding: false,
     label: 'Date',
   },
   {
-    id: 'Status',
+    id: 'status',
     numeric: true,
     disablePadding: false,
     label: 'Status',
@@ -196,7 +197,7 @@ function EnhancedTableHead(props) {
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={headCell.id==="Mobile Number"?null:headCell.id==="Status"?null:createSortHandler(headCell.id)}
+              onClick={headCell.id==="mobileNumber"?null:headCell.id==="status"?null:createSortHandler(headCell.id)}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -279,11 +280,26 @@ EnhancedTableToolbar.propTypes = {
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  const [orderBy, setOrderBy] = React.useState('mobileNumber');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(12);
+  const url="https://billbil-api.herokuapp.com/app/v1/sell/item"
+  const [rowdata,setRowData] = React.useState([]);
+
+    //.....................................................Requests.................................................
+  
+  React.useEffect(()=>{
+    async function fetchData(){
+        const request = await axios.get(url);
+        console.log(request.data);  
+        setRowData(request.data);
+        return request;
+    }
+
+    fetchData();
+}, [url]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -293,7 +309,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.name);
+      const newSelected = rowdata.map((n) => n.name);
       setSelected(newSelected);
       return;
     }
@@ -355,12 +371,12 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={rowdata.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(rowdata, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
@@ -373,7 +389,7 @@ export default function EnhancedTable() {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row._id}
                       selected={isItemSelected}
                       className=""
                     >
@@ -396,10 +412,10 @@ export default function EnhancedTable() {
                       >
                         {row.name}
                       </TableCell>
-                      <TableCell align="right" className='text-[14px] text-[#ff8340]'>{row.calories}</TableCell>
-                      <TableCell align="right" className='text-[14px] text-[#ff8340]'>{row.fat}</TableCell>
-                      <TableCell align="right" className='text-[14px] text-[#ff8340]'>{row.carbs}</TableCell>
-                      <TableCell align="right" className='text-[14px] text-[#ff8340]'>{row.protein}</TableCell>
+                      <TableCell align="right" className='text-[14px] text-[#ff8340]'>{row.number}</TableCell>
+                      <TableCell align="right" className='text-[14px] text-[#ff8340]'>{row.total}</TableCell>
+                      <TableCell align="right" className='text-[14px] text-[#ff8340]'>{row.date}</TableCell>
+                      <TableCell align="right" className='text-[14px] text-[#ff8340]'>{row.status}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -418,7 +434,7 @@ export default function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={10}
           component="div"
-          count={rows.length}
+          count={rowdata.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

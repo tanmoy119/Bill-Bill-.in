@@ -11,7 +11,7 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 
 var i ;
-const TAX_RATE = 0.07;
+const TAX_RATE = 0.0;
 
 const top100Films = [
     { title: 'Bulb-9wat(Anchore)', year: 90 },
@@ -47,6 +47,25 @@ const Sell = (props) => {
     mtotal:''
   })
 
+  const [rowdata,setRowData] = React.useState([]);
+
+
+  //.....................................................Requests.................................................
+  const url="https://billbil-api.herokuapp.com/app/v1/add/item"
+  const url2="https://billbil-api.herokuapp.com/app/v1/sell/item"
+  useEffect(()=>{
+    async function fetchData(){
+        const request = await axios.get(url);
+        console.log(request.data);
+        setRowData(request.data);
+        return request;
+    }
+
+    fetchData();
+}, [url]);
+
+
+
   const [userData,setUserData] = useState({
     name:"",
     email:"",
@@ -57,12 +76,12 @@ const Sell = (props) => {
     status:""
   })
     const defaultProps = {
-        options: top100Films,
-        getOptionLabel: (option) => option.title,
+        options: rowdata,
+        getOptionLabel: (option) => option.name,
       };
     
       const flatProps = {
-        options: top100Films.map((option) => option.title),
+        options: top100Films.map((option) => option.name),
       };
     
       const addArr = (e)=>{
@@ -182,9 +201,37 @@ const Sell = (props) => {
 
 
    // console.log(total);
+
+   const submit = async (e)=>{
+    e.preventDefault();
+    console.log(row);
+     const res = await axios({
+          method: 'post',
+          url: url2,
+          headers: {}, 
+          data: {
+              name:userData.name,
+              email:userData.email,
+              number:userData.number,
+              address:userData.address,
+              referral:userData.referral,
+              paidAmount:userData.paidamount,
+              status:userData.status,
+              items:row,
+              subtotal:total.stotal,
+              tax:TAX_RATE,
+              total:total.mtotal
+
+
+            
+          }
+        });
+  
+        console.log(res);
+  }
   
   return (<>
-    <Form >
+    <Form onSubmit={submit}>
     <div className='flex m-4'>
       <div className="mr-3">
       <div className="">
@@ -256,8 +303,8 @@ const Sell = (props) => {
           setValue(newValue);
           setValue((prevalue)=>{
             
-            row.title = (newValue)? newValue.title:""
-            row.price = (newValue)? newValue.year:""
+            row.title = (newValue)? newValue.name:""
+            row.price = (newValue)? newValue.sellingPrice:""
            // row.qty = 0
            return {
             ...prevalue
@@ -324,7 +371,7 @@ const Sell = (props) => {
       </div>
   
     </div>
-    <button type='submit'>Submit</button>
+    <button type='submit' className='ml-[1400px] '>Submit</button>
 </Form>
 </>
   )
