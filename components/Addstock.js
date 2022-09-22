@@ -4,6 +4,9 @@ import {useState} from "react";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Addstock = () => {
   const url = "https://billbil-api.herokuapp.com/app/v1/add/item"
@@ -42,6 +45,13 @@ const Addstock = () => {
             
           }
         });
+        if(res.status===201){
+         
+          notifySuccess();
+        }else{
+          notifyError(res.data.message);
+        }
+        
 
         console.log(res);
   }
@@ -53,7 +63,30 @@ const Addstock = () => {
     getOptionLabel: (option) => option,
   };
 
-  return (
+
+  const notifySuccess = () =>{
+    toast.success('Iten added Successfully', {
+      position: "top-left",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+  }
+  const notifyError = (err) =>{
+    toast.error(err, {
+      position: "top-left",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+  }
+  return (<>
     <Main className=" h-full  min-w-[543.172px] bg-[#272c4a] flex flex-row justify-center items-center p-6 rounded-lg">
       <form className="flex" onSubmit={submit}>
         <div>
@@ -103,7 +136,10 @@ const Addstock = () => {
         </div>
         
       </form>
+      
     </Main>
+    <ToastContainer/>
+    </>
   )
 }
 

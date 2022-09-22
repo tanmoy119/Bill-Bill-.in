@@ -79,32 +79,32 @@ function getComparator(order, orderBy) {
 // This method is created for cross-browser compatibility, if you don't
 // need to support IE11, you can use Array.prototype.sort() directly
 function stableSort(array, comparator) {
- // console.log("touch2");
+ // //console.log("touch2");
  //let array1=[];
  array.map((cl)=>{
     
   const n = new Date(cl.date);
   cl.date=n;
   //array1.push(n);
-  console.log(cl)
+  //console.log(cl)
  })
   const stabilizedThis = array.map((el, index) => [el, index]);
- // console.log(stabilizedThis);
- // console.log(array);
+ // //console.log(stabilizedThis);
+ // //console.log(array);
   stabilizedThis.sort((a, b) => {
-   // console.log("lol");
+   // //console.log("lol");
     const order = comparator(a[0], b[0]);
-    //console.log(order);
+    ////console.log(order);
     if (order !== 0) {
       return order;
     }
-   console.log("err"); 
+   //console.log("err"); 
     return a[1] - b[1];
   });
 
   stabilizedThis.map((cl)=>{
     cl[0].date= new Date(cl[0].date).toUTCString();
-    console.log(cl);
+    //console.log(cl);
   })
   
   return stabilizedThis.map((el) => el[0]);
@@ -118,7 +118,7 @@ const dateSort = ()=>{
     
      const n = new Date(cl.date);
      arr.push(n);
-    // console.log(arr)
+    // //console.log(arr)
     })
     
     arr.sort(function(a, b){
@@ -168,7 +168,7 @@ function EnhancedTableHead(props) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
-    console.log("touch");
+    //console.log("touch");
     onRequestSort(event, property);
   };
 
@@ -291,7 +291,7 @@ export default function EnhancedTable() {
   React.useEffect(()=>{
     async function fetchData(){
         const request = await axios.get(url);
-        console.log(request.data);
+        //console.log(request.data);
         setRowData(request.data);
         return request;
     }

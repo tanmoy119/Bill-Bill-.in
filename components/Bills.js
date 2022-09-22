@@ -31,34 +31,34 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import axios from 'axios';
 
-function createData(name, mobileNumber, billAmount, date, status) {
-  return {
-    name,
-    mobileNumber,
-    billAmount,
-    date,
-    status,
-  };
-}
+// function createData(name, mobileNumber, billAmount, date, status) {
+//   return {
+//     name,
+//     mobileNumber,
+//     billAmount,
+//     date,
+//     status,
+//   };
+// }
 
-const rows = [
-  createData('Cupcake', 9330629437, 3.7, '9/14/2023', 4.3),
-  createData('Donut', 452, 25.0, '8/15/2024', 4.9),
-  createData('Eclair', 262, 16.0, '8/15/2022', 6.0),
-  createData('Frozen yoghurt', 159, 6.0, '8/18/2024', 4.0),
-  createData('Gingerbread', 356, 16.0, '10/15/2024', 3.9),
-  createData('Honeycomb', 9330629437, 3.2,'8/17/2024', 6.5),
-  createData('Ice cream sandwich', 237, 9.0, '8/25/2024', 4.3),
-  createData('Jelly Bean', 375, 0.0, '8/15/2027', 0.0),
-  createData('Oreo1', 437, 18.0, '8/27/2028', 4.0),
-  createData('KitKat', 518, 26.0, '9/10/2024', 7.0),
-  createData('Lollipop', 392, 0.2, '11/21/2024', 0.0),
-  createData('Oreo2', 437, 18.0, '12/15/2018', 4.0),
-  createData('Marshmallow', 9330629437, 0, '8/16/2029', 2.0),
-  createData('Oreo3', 437, 18.0, '5/11/2024', 4.0),
-  createData('Nougat', 360, 19.0, '7/19/2024', 37.0),
-  createData('Oreo4', 437, 18.0, '7/13/2024', 4.0),
-];
+// const rows = [
+//   createData('Cupcake', 9330629437, 3.7, '9/14/2023', 4.3),
+//   createData('Donut', 452, 25.0, '8/15/2024', 4.9),
+//   createData('Eclair', 262, 16.0, '8/15/2022', 6.0),
+//   createData('Frozen yoghurt', 159, 6.0, '8/18/2024', 4.0),
+//   createData('Gingerbread', 356, 16.0, '10/15/2024', 3.9),
+//   createData('Honeycomb', 9330629437, 3.2,'8/17/2024', 6.5),
+//   createData('Ice cream sandwich', 237, 9.0, '8/25/2024', 4.3),
+//   createData('Jelly Bean', 375, 0.0, '8/15/2027', 0.0),
+//   createData('Oreo1', 437, 18.0, '8/27/2028', 4.0),
+//   createData('KitKat', 518, 26.0, '9/10/2024', 7.0),
+//   createData('Lollipop', 392, 0.2, '11/21/2024', 0.0),
+//   createData('Oreo2', 437, 18.0, '12/15/2018', 4.0),
+//   createData('Marshmallow', 9330629437, 0, '8/16/2029', 2.0),
+//   createData('Oreo3', 437, 18.0, '5/11/2024', 4.0),
+//   createData('Nougat', 360, 19.0, '7/19/2024', 37.0),
+//   createData('Oreo4', 437, 18.0, '7/13/2024', 4.0),
+// ];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -79,32 +79,32 @@ function getComparator(order, orderBy) {
 // This method is created for cross-browser compatibility, if you don't
 // need to support IE11, you can use Array.prototype.sort() directly
 function stableSort(array, comparator) {
- // console.log("touch2");
+ // //console.log("touch2");
  //let array1=[];
  array.map((cl)=>{
     
   const n = new Date(cl.date);
   cl.date=n;
   //array1.push(n);
-  console.log(cl)
+  //console.log(cl)
  })
   const stabilizedThis = array.map((el, index) => [el, index]);
- // console.log(stabilizedThis);
- // console.log(array);
+ // //console.log(stabilizedThis);
+ // //console.log(array);
   stabilizedThis.sort((a, b) => {
-   // console.log("lol");
+   // //console.log("lol");
     const order = comparator(a[0], b[0]);
-    //console.log(order);
+    ////console.log(order);
     if (order !== 0) {
       return order;
     }
-   console.log("err"); 
+   //console.log("err"); 
     return a[1] - b[1];
   });
 
   stabilizedThis.map((cl)=>{
     cl[0].date= new Date(cl[0].date).toUTCString();
-    console.log(cl);
+    //console.log(cl);
   })
   
   return stabilizedThis.map((el) => el[0]);
@@ -118,7 +118,7 @@ const dateSort = ()=>{
     
      const n = new Date(cl.date);
      arr.push(n);
-    // console.log(arr)
+    // //console.log(arr)
     })
     
     arr.sort(function(a, b){
@@ -168,7 +168,7 @@ function EnhancedTableHead(props) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
-    console.log("touch");
+    //console.log("touch");
     onRequestSort(event, property);
   };
 
@@ -293,7 +293,7 @@ export default function EnhancedTable() {
   React.useEffect(()=>{
     async function fetchData(){
         const request = await axios.get(url);
-        console.log(request.data);  
+        //console.log(request.data);  
         setRowData(request.data);
         return request;
     }

@@ -56,7 +56,7 @@ const Sell = (props) => {
   useEffect(()=>{
     async function fetchData(){
         const request = await axios.get(url);
-        console.log(request.data);
+        //console.log(request.data);
         setRowData(request.data);
         return request;
     }
@@ -95,15 +95,15 @@ const Sell = (props) => {
 
     const removeRow = (e)=>{
       e.preventDefault();
-     // console.log(n);
-      console.log(row);
+     // //console.log(n);
+      //console.log(row);
       //const array = row;
       row.pop();
       setRow(()=>{
         
         return[...row];
       })
-       console.log(...row);
+       //console.log(...row);
       
     }
 
@@ -118,7 +118,7 @@ const Sell = (props) => {
       setData((prevalue)=>{
           row[n][name] = prevalue[name]
           row[n].amount =(row[n].price*row[n].qty)-(row[n].price*row[n].qty)*row[n].discount/100
-         // console.log(row[n].amount);
+         // //console.log(row[n].amount);
          return {
           ...prevalue,
           [name]:value
@@ -129,7 +129,7 @@ const Sell = (props) => {
           setTotal(()=>{
             function ccyFormat(num) {
         
-              //console.log(num);
+              ////console.log(num);
               if (num!=0) {
                var value= num.toFixed(2);
                 return value;
@@ -141,15 +141,15 @@ const Sell = (props) => {
                   return items.map((c) => c.amount).reduce((sum, i) => sum + i, 0);
                   
                 }
-               // console.log(row);
+               // //console.log(row);
               const invoiceSubtotal = subtotal(row);
               const invoiceTaxes = TAX_RATE * invoiceSubtotal;
               const invoiceTotal = invoiceTaxes + invoiceSubtotal;
-             // console.log(invoiceSubtotal);
+             // //console.log(invoiceSubtotal);
               const stotal= ccyFormat(invoiceSubtotal);
               const tax =   ccyFormat(invoiceTaxes);
               const mtotal= ccyFormat(invoiceTotal);
-             // console.log(stotal);
+             // //console.log(stotal);
             return{
             stotal:stotal,
             tax:tax,
@@ -164,7 +164,7 @@ const Sell = (props) => {
     
       setUserData((prevalue)=>{
         
-        //console.log(prevalue);
+        ////console.log(prevalue);
         return {
             ...prevalue,
             [name]: value
@@ -173,7 +173,7 @@ const Sell = (props) => {
       })
   
       setUserData((pv)=>{
-       // console.log(pv);
+       // //console.log(pv);
         let status="-"
       
         
@@ -200,11 +200,11 @@ const Sell = (props) => {
 
 
 
-   // console.log(total);
+   // //console.log(total);
 
    const submit = async (e)=>{
     e.preventDefault();
-    console.log(row);
+    //console.log(row);
      const res = await axios({
           method: 'post',
           url: url2,
@@ -227,7 +227,7 @@ const Sell = (props) => {
           }
         });
   
-        console.log(res);
+        //console.log(res);
   }
   
   return (<>
