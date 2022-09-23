@@ -226,7 +226,7 @@ export default function EnhancedTable() {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(12);
-  const url="https://billbil-api.herokuapp.com/app/v1/add/item"
+  const url="http://localhost:5000/app/v1/get/item"
   const [rowdata,setRowData] = React.useState([]);
   
   React.useEffect(()=>{

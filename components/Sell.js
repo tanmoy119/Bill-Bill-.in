@@ -10,6 +10,9 @@ import Stack from '@mui/material/Stack';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 var i ;
 const TAX_RATE = 0.0;
 
@@ -51,7 +54,7 @@ const Sell = (props) => {
 
 
   //.....................................................Requests.................................................
-  const url="https://billbil-api.herokuapp.com/app/v1/add/item"
+  const url="https://billbil-api.herokuapp.com/app/v1/get/item"
   const url2="https://billbil-api.herokuapp.com/app/v1/sell/item"
   useEffect(()=>{
     async function fetchData(){
@@ -88,7 +91,7 @@ const Sell = (props) => {
         e.preventDefault();
         setRow((p)=>{
             return [
-                ...p,{title:'',qty:'',price:'',discount:'',amount:''}
+                ...p,{title:'',qty:'',price:'',discount:'',amount:'',unit:""}
             ]
         });
     }
@@ -222,12 +225,39 @@ const Sell = (props) => {
               tax:TAX_RATE,
               total:total.mtotal
 
-
-            
           }
         });
-  
-        //console.log(res);
+        if(res.status===201){
+         
+          notifySuccess();
+         // setOpenPopup(false);
+        }else{
+          notifyError(res.data.message);
+        }
+        console.log(res);
+        
+  }
+  const notifySuccess = () =>{
+    toast.success('Iten added Successfully', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+  }
+  const notifyError = (err) =>{
+    toast.error(err, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
   }
   
   return (<>
@@ -300,11 +330,13 @@ const Sell = (props) => {
         id="disable-close-on-select"
         clearOnEscape
         onChange={(event, newValue) => {
+          console.log(newValue);
           setValue(newValue);
           setValue((prevalue)=>{
             
             row.title = (newValue)? newValue.name:""
             row.price = (newValue)? newValue.sellingPrice:""
+            row.unit = (newValue)? newValue.unit:""
            // row.qty = 0
            return {
             ...prevalue
@@ -319,7 +351,7 @@ const Sell = (props) => {
                 </TableCell>
 
 
-      <TableCell ><input style={{color:'rgb(39 167 166 / 90%)'}}  className='qtyInput' type='number' name='qty' value={row.qty} onChange={(e)=> inputEvent(e,n)}/></TableCell>
+      <TableCell ><input style={{color:'rgb(39 167 166 / 90%)'}}  className='qtyInput' type='number' name='qty' value={row.qty} onChange={(e)=> inputEvent(e,n)}/><span>{(row.unit)}</span></TableCell>
       <TableCell ><span className='Rprice'>{row.price}</span></TableCell>
       <TableCell ><input style={{color:'#7e0505'}} maxlength="100" className='qtyInput' type='number' name='discount' value={row.discount} onChange={(e)=> inputEvent(e,n)}/>%</TableCell>
       <TableCell >{row.amount}</TableCell>
@@ -357,21 +389,22 @@ const Sell = (props) => {
         </label>
         <input type="number" name='paidamount' value={userData.paidamount} onChange={inputEvent2} placeholder='Paid amount'  max={total.mtotal} className='num rounded-md px-4 py-2 mt-2 outline-none w-full border-2 border-gray-400' />
       </div>
-      <div className="">
+      {/* <div className="">
         <label className=''>
           Email
         </label>
         <input type="email" placeholder='Email' className='rounded-md px-4 py-2 mt-2 outline-none w-full border-2 border-gray-400' />
-      </div>
-      <div className="">
-        <label className='bg-green-500'>
+      </div> */}
+      <div className="m-4 ">
+        <label className='bg-[#60eb88] p-2 rounded-xl text-[#ac2c2c] '>
           {userData.status}
         </label>
         </div>
       </div>
   
     </div>
-    <button type='submit' className='ml-[1400px] '>Submit</button>
+    <button type='submit' className='ml-[1400px] border-solid border-[2px] border-green-500 rounded-lg p-2 hover:bg-green-600 hover:text-white transition-all ease-in '>Submit</button>
+    <ToastContainer className="z-10"/>
 </Form>
 </>
   )

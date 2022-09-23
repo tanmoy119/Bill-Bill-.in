@@ -54,7 +54,7 @@ const Sidebar = ({openPopup, setOpenPopup}) => {
         </div>
         <div className={`p-7 flex-1 h-screen md:h-[873px] absolute top-16 left-64 flex justify-center pl-auto pr-auto z-[-1]`}>
         {(component==="In Stock")?<Instock/>:(component==="Out-of-Stock")?<Outofstock/>:(component==="Bill's")?<Bills/>:(component==="Due")?<Due/>
-        :(component==="Add to Stock")?<Addstock/>:(component==="Expenses")?<Expense/>: <>
+        :(component==="Add to Stock")?<Addstock setComponent={setComponent} />:(component==="Expenses")?<Expense/>: <>
         <h1>Dashboard</h1>
         
         

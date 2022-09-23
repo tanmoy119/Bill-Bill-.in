@@ -8,7 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-const Addstock = () => {
+const Addstock = ({setComponent}) => {
   const url = "https://billbil-api.herokuapp.com/app/v1/add/item"
   const [data, setData] = useState({
     name:"",
@@ -48,6 +48,8 @@ const Addstock = () => {
         if(res.status===201){
          
           notifySuccess();
+        //  setTimeout(setComponent("In Stock"), 10000);
+          
         }else{
           notifyError(res.data.message);
         }
