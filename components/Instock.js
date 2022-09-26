@@ -298,7 +298,8 @@ export default function EnhancedTable() {
 
   return (
     <Box sx={{ width: '1500px', height:"100%" }} className="bg-[#272c4a] ">
-      <Paperr sx={{ width: '100%', mb: 2 }} className="bg-green-300 p-2">
+      <div className="bg-[#666b8c]">
+      <Paperr sx={{ width: '100%', mb: 2 }} className="bg-[#666b8c] p-2">
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
@@ -380,6 +381,7 @@ export default function EnhancedTable() {
           // onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paperr>
+      </div>
       {/* <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
