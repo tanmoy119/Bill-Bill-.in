@@ -43,10 +43,10 @@ const Sidebar = ({openPopup, setOpenPopup}) => {
         <ul className='pt-6'>
             {Menus.map((cl,i)=>(
                 <li onClick={()=>((cl.title==="Sell")?setOpenPopup(true):setComponent(cl.title))} key={i} className='text-gray-300 text-xl flex items-center gap-x-4 cursor-pointer p-4 hover:bg-[#8f8f8fa1] '>
-                   {(cl.title==="Dashboard")?<DashboardIcon sx={{fontSize:"30px"}} className={`text-green-600  ${!open && "text-[35px]"} duration-300 transition-all`}/>:(cl.title==="Sell")?<SellIcon sx={{fontSize:"30px"}} className={`text-pink-600  ${!open && "text-[35px]"} duration-300 transition-all`}/>:
-                   (cl.title==="In Stock")?<InventorySharpIcon sx={{fontSize:"30px"}} className={`text-blue-600  ${!open && "text-[35px]"} duration-300 transition-all`}/>:(cl.title==="Out-of-Stock")?<RemoveShoppingCartIcon sx={{fontSize:"30px"}} className={`text-purple-700  ${!open && "text-[35px]"} duration-300 transition-all`}/>:
-                   (cl.title==="Bill's")?<FileCopyIcon sx={{fontSize:"30px"}} className={`text-orange-600  ${!open && "text-[35px]"} duration-300 transition-all`}/>:(cl.title==="Due")?<NoteAltIcon sx={{fontSize:"30px"}} className={`text-red-600  ${!open && "text-[35px]"} duration-300 transition-all`}/>:(cl.title==="Add to Stock")?<AddShoppingCartIcon sx={{fontSize:"30px"}} className={`text-red-600  ${!open && "text-[35px]"} duration-300 transition-all`} />:
-                    <MoneyOffIcon sx={{fontSize:"30px"}} className={`text-red-600  ${!open && "text-[35px]"} duration-300 transition-all`}/>
+                   {(cl.title==="Dashboard")?<DashboardIcon sx={(!open)?{fontSize:"35px"}:{fontSize:"30"}} className={`text-green-600   duration-300 transition-all`}/>:(cl.title==="Sell")?<SellIcon sx={(!open)?{fontSize:"35px"}:{fontSize:"30"}} className={`text-pink-600   duration-300 transition-all`}/>:
+                   (cl.title==="In Stock")?<InventorySharpIcon sx={(!open)?{fontSize:"35px"}:{fontSize:"30"}} className={`text-blue-600   duration-300 transition-all`}/>:(cl.title==="Out-of-Stock")?<RemoveShoppingCartIcon sx={(!open)?{fontSize:"35px"}:{fontSize:"30"}} className={`text-purple-700   duration-300 transition-all`}/>:
+                   (cl.title==="Bill's")?<FileCopyIcon sx={(!open)?{fontSize:"35px"}:{fontSize:"30"}} className={`text-orange-600   duration-300 transition-all`}/>:(cl.title==="Due")?<NoteAltIcon sx={(!open)?{fontSize:"35px"}:{fontSize:"30"}} className={`text-red-600   duration-300 transition-all`}/>:(cl.title==="Add to Stock")?<AddShoppingCartIcon sx={(!open)?{fontSize:"35px"}:{fontSize:"30"}} className={`text-red-600   duration-300 transition-all`} />:
+                    <MoneyOffIcon sx={(!open)?{fontSize:"35px"}:{fontSize:"30"}} className={`text-red-600   duration-300 transition-all`}/>
                    }<span className={`${!open && "hidden"} origin-left duration-300`}>{cl.title}</span> 
                 </li>
             ))}
