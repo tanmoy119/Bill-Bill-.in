@@ -22,6 +22,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import axios from 'axios';
+import styled from 'styled-components';
 
 // function createData(name, quantity, buyingPrice, sellingPrice, protein) {
 //   return {
@@ -297,7 +298,7 @@ export default function EnhancedTable() {
 
   return (
     <Box sx={{ width: '1500px', height:"100%" }} className="bg-[#272c4a] ">
-      <Paper sx={{ width: '100%', mb: 2 }} className="bg-[#666b8c] p-2">
+      <Paperr sx={{ width: '100%', mb: 2 }} className="bg-[#666b8c] ">
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
@@ -378,7 +379,7 @@ export default function EnhancedTable() {
           onPageChange={handleChangePage}
           // onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      </Paper>
+      </Paperr>
       {/* <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
@@ -386,3 +387,7 @@ export default function EnhancedTable() {
     </Box>
   );
 }
+
+const Paperr = styled(Paper)`
+
+`
