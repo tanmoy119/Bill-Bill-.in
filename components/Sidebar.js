@@ -15,6 +15,7 @@ import Due from "../components/Due";
 import Addstock from "../components/Addstock";
 import MoneyOffIcon from '@mui/icons-material/MoneyOff';
 import Expense from './Expense';
+import Billformat from './Billformat';
 
 const Sidebar = ({openPopup, setOpenPopup}) => {
     const [open,setOpen] = useState(false);
@@ -53,8 +54,8 @@ const Sidebar = ({openPopup, setOpenPopup}) => {
         </ul>
         </div>
         <div className={`p-7 flex-1 h-screen md:h-[873px] absolute top-16 left-64 flex justify-center pl-auto pr-auto z-[-1]`}>
-        {(component==="In Stock")?<Instock/>:(component==="Out-of-Stock")?<Outofstock/>:(component==="Bill's")?<Bills/>:(component==="Due")?<Due/>
-        :(component==="Add to Stock")?<Addstock setComponent={setComponent} />:(component==="Expenses")?<Expense/>: <>
+        {(component==="In Stock")?<Instock/>:(component==="Out-of-Stock")?<Outofstock/>:(component==="Bill's")?<Bills setComponent={setComponent} />:(component==="Due")?<Due setComponent={setComponent}/>
+        :(component==="Add to Stock")?<Addstock setComponent={setComponent} />:(component==="Expenses")?<Expense/>:(component==="Billformat")?<Billformat/>: <>
         <h1>Dashboard</h1>
         
         

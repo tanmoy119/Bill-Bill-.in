@@ -90,9 +90,9 @@ const Addstock = ({setComponent}) => {
   }
   return (<>
     <Main className=" h-full  min-w-[543.172px] bg-[#272c4a] flex flex-row justify-center items-center p-6 rounded-lg">
-      <form className="flex" onSubmit={submit}>
-        <div>
-        <div className="flex flex-col m-2">
+      <form className="grid grid-cols-3" onSubmit={submit}>
+       
+        <div className="flex flex-col m-2 col-span-2">
           <label className="text-[#ea580c] text-xl" >Name</label>
           <input onChange={inputEvent} name="name" value={data.name} type="text" className="rounded-md text-gray-500  px-4 py-2 mt-2 outline-none  w-full border-2 border-gray-400 appearance-none" placeholder="Item Name" />
         </div>
@@ -100,7 +100,9 @@ const Addstock = ({setComponent}) => {
         <div className="flex flex-col m-2">
           <label className=" text-[#ea580c] text-xl" >Quantity</label>
           <input onChange={inputEvent} name="qty" value={data.qty} type="Number" className="num rounded-md text-gray-500  px-4 py-2 mt-2 outline-none  w-full border-2 border-gray-400 appearance-none" placeholder="Quantity" />
-          <Autocomplete
+         
+        </div>
+        <Autocomplete
         {...defaultProps}
         id="disable-close-on-select"
         clearOnEscape
@@ -119,10 +121,9 @@ const Addstock = ({setComponent}) => {
         )}
         className="text-white rounded-md bg-white p-2 m-2 mt-3"
       />
-        </div>
-        </div>
         
-        <div>
+        
+       
         <div className="flex flex-col m-2">
           <label className="text-[#ea580c] text-xl" >Buying price</label>
           <input onChange={inputEvent} name="bprice" value={data.bprice} type="Number" className="num rounded-md text-gray-500  px-4 py-2 mt-2 outline-none  w-full border-2 border-gray-400 appearance-none" placeholder="Buying price" />
@@ -132,7 +133,7 @@ const Addstock = ({setComponent}) => {
           <label className="text-[#ea580c] text-xl" >Selling price</label>
           <input onChange={inputEvent} name="sprice" value={data.sprice} type="Number" className="num rounded-md text-gray-500  px-4 py-2 mt-2 outline-none  w-full border-2 border-gray-400 appearance-none" placeholder="Selling price" />
         </div>
-        </div>
+        
         <div>
         <button type="submit" className="bg-green-700 hover:bg-green-600 rounded-md m-4 p-2 text-gray-300">Add</button>
         </div>

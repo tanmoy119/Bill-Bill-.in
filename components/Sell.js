@@ -180,11 +180,11 @@ const Sell = (props) => {
         let status="-"
       
         
-        if (pv.paidamount==total.mtotal) {
+        if (pv.paidamount>=total.mtotal) {
           status="Paid";
            
   
-        }else if (pv.paidamount==0) {
+        }else if (pv.paidamount<=0) {
           status="Due";
            
   
@@ -223,7 +223,8 @@ const Sell = (props) => {
               items:row,
               subtotal:total.stotal,
               tax:TAX_RATE,
-              total:total.mtotal
+              total:total.mtotal,
+              // date:new Date().toString()
 
           }
         });

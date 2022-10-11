@@ -1,11 +1,3 @@
-// const Bills = () => {
-//   return (
-//     <div>Bills</div>
-//   )
-// }
-
-// export default Bills;
-
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
@@ -30,6 +22,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import axios from 'axios';
+import Popup from './Popup';
+import Billformat from './Billformat';
 
 // function createData(name, mobileNumber, billAmount, date, status) {
 //   return {
@@ -103,8 +97,9 @@ function stableSort(array, comparator) {
   });
 
   stabilizedThis.map((cl)=>{
-    cl[0].date= new Date(cl[0].date).toUTCString();
-    //console.log(cl);
+    //console.log(cl[0].date);
+    cl[0].date= new Date(cl[0].date).toString();
+   // console.log(cl[0].date);
   })
   
   return stabilizedThis.map((el) => el[0]);
@@ -278,7 +273,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable() {
+export default function EnhancedTable({setComponent}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('mobileNumber');
   const [selected, setSelected] = React.useState([]);
@@ -287,6 +282,8 @@ export default function EnhancedTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(12);
   const url="https://billbil-api.herokuapp.com/app/v1/sell/item"
   const [rowdata,setRowData] = React.useState([]);
+  const [openPopup,setOpenPopup] = React.useState(false);
+  const [popupData, setPopupData] = React.useState();
 
     //.....................................................Requests.................................................
   
@@ -316,25 +313,12 @@ export default function EnhancedTable() {
     setSelected([]);
   };
 
-  // const handleClick = (event, name) => {
-  //   const selectedIndex = selected.indexOf(name);
-  //   let newSelected = [];
+  const handleClick = (row) => {
+    setPopupData(row);
 
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, name);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(
-  //       selected.slice(0, selectedIndex),
-  //       selected.slice(selectedIndex + 1),
-  //     );
-  //   }
+    setOpenPopup(true);
 
-  //   setSelected(newSelected);
-  // };
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -356,6 +340,7 @@ export default function EnhancedTable() {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rowdata.length) : 0;
 
   return (
+    <>
     <Box sx={{ width: '1500px', height:"100%" }} className="">
       <Paper sx={{ width: '100%', mb: 2 }} className="bg-[#666b8c] p-2">
         <EnhancedTableToolbar numSelected={selected.length} />
@@ -385,7 +370,7 @@ export default function EnhancedTable() {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(row)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -446,5 +431,9 @@ export default function EnhancedTable() {
         label="Dense padding"
       /> */}
     </Box>
+    <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} >
+        <Billformat popupData={popupData} setOpenPopup={setOpenPopup}/>
+    </Popup>
+    </>
   );
 }
