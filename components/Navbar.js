@@ -3,12 +3,18 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
 import { Avatar } from '@mui/material';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { Cookies } from 'react-cookie';
+import axios from 'axios';
 
 
 const Navbar = ({login}) => {
+    const url = "https://billbil-api.herokuapp.com/app/v1/verify/jwt";
+    const url2 = "https://billbil-api.herokuapp.com/app/v1/logout"
     const [open,setOpen] = useState(false);
-
-    const user = true;
+    const [user,setUser] = useState(false);
+    
     let Links = [
         {name:"HOME",link:"/"},
         {name:"DASHBOARD",link:"/dashboard"},
@@ -16,6 +22,62 @@ const Navbar = ({login}) => {
         {name:"CONTACT US",link:"/CONTACT US"},
         {name:"LOG IN",link:"/login"}
     ]
+
+    const router =  useRouter();
+
+    const Cokies = new Cookies();
+  
+  
+    const  token = Cokies.get('jwt');
+    
+    
+   
+  
+    // Server-render loading state
+  
+    useEffect(()=>{
+      
+      
+     (async ()=>{
+    //   if(!token){
+    //     router.push("/");
+    //   }
+       const res = await axios({
+        method: 'post',
+        url: url,
+        headers: {}, 
+        data: {
+            token:token
+          
+        }
+      }); 
+        const udata = res.data ; 
+       
+      if(!udata.verified){
+       // router.push("/");
+      }else if(res.status == 200 ){
+       setUser(udata);
+      }
+    })()
+    },[url]);
+
+
+    const logout = async (token)=>{
+
+        const res = await axios({
+          method: 'post',
+          url: url2,
+          headers: {}, 
+          data: {
+            token:token 
+            
+          }
+        });
+        router.push('/login');
+       Cokies.remove('jwt');
+    
+    
+      }
   return (
    <>
    <div className={`shadow-md w-full fixed top-0 left-0 ${(login)?'bg-[#272c4a]':''} `}>
@@ -33,9 +95,9 @@ const Navbar = ({login}) => {
                 Links.map((cl)=>{
                     if(user && cl.name==="LOG IN"){
                         return(<li key={cl.name} className="md:mr-8 text-base text-gray-200 hover:text-gray-400 duration-300  md:my-0 my-7 ml-10">
-                        <Link className='' href={cl.link}>
-                        <Avatar alt='img' src='https://e7.pngegg.com/pngimages/85/114/png-clipart-avatar-user-profile-male-logo-profile-icon-hand-monochrome.png'/>
-                        </Link>
+                    
+                       <button onClick={()=>logout(token)}> <Avatar alt='img' src='https://e7.pngegg.com/pngimages/85/114/png-clipart-avatar-user-profile-male-logo-profile-icon-hand-monochrome.png'/></button>
+                        
                         </li>);
                     }
                     if(!user && cl.name==="DASHBOARD"){

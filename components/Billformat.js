@@ -4,21 +4,84 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { fontSize } from '@mui/system';
 import { useState } from 'react';
 import styled from 'styled-components';
+import axios from "axios"
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Billformat = ({popupData,setOpenPopup}) => {
+  //console.log(popupData);
+  const url = "https://billbil-api.herokuapp.com/app/v1/bills/update"
   const [input,setInput] = useState(false);
+
+  const [data, setData] = useState("");
+
+  const inputEvent = (e)=>{
+      const {name,value} = e.target;
+
+      setData((prevalue)=>{
+          return{
+              ...prevalue,
+              [name]:value
+          }
+          
+      })
+
+
+  }
 
   const close = ()=>{
     setOpenPopup(false)
     setInput(false)
   }
 
-  const submit = (e)=>{
+  const submit = async (e)=>{
     e.preventDefault();
+
+    const res = await axios({
+      method: 'post',
+      url: url,
+      headers: {}, 
+      data: {
+          id:popupData._id,
+          amount: data.amount
+
+      }
+    });
+    console.log(res);
+    if(res.status==200){
+      notifySuccess();
+    }else{
+      notifyError();
+     
+    }
   }
 
+  const notifySuccess = () =>{
+    toast.success('Updated Successfully', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+  }
+  const notifyError = (err) =>{
+    toast.error("err", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+  }
 //console.log(popupData);
   return (
+    <>
     <Cointainer className="">
       <button  className=' text-blue-900  absolute' onClick={()=>close()}><ArrowBackIcon sx={{fontSize:"30px"}}/></button>
     <div className="w-[780px] h-screen flex flex-col  ml-auto mr-auto pr-[35px] pl-[35px]  border shadow-2xl">
@@ -90,7 +153,7 @@ const Billformat = ({popupData,setOpenPopup}) => {
             
             {(input)?<>
             <form onSubmit={submit} className=" flex flex-col">
-              <input type="Number" className='inp border border-gray-500 appearance-none outline-none m-2' />
+              <input type="Number" name="amount" className='inp border border-gray-500 appearance-none outline-none m-2' onChange={inputEvent}  value={data.amount} />
               <button type='Submit' className='border border-pink-600 w-1/2 p-1 rounded-lg  '>Submit</button>
             </form>
             </>:<></>}
@@ -123,8 +186,9 @@ const Billformat = ({popupData,setOpenPopup}) => {
     </div>
     
     </div>
-
     </Cointainer>
+    <ToastContainer className="z-10"/>
+    </>
   )
 }
 

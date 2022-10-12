@@ -1,11 +1,3 @@
-// const Bills = () => {
-//   return (
-//     <div>Bills</div>
-//   )
-// }
-
-// export default Bills;
-
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
@@ -32,35 +24,6 @@ import { visuallyHidden } from '@mui/utils';
 import axios from 'axios';
 import Popup from './Popup';
 import Billformat from './Billformat';
-
-function createData(name, mobileNumber, dueAmount, date, protein) {
-  return {
-    name,
-    mobileNumber,
-    dueAmount,
-    date,
-    protein,
-  };
-}
-
-const rows = [
-  createData('Cupcake', 9330629437, 3.7, '9/14/2023', 4.3),
-  createData('Donut', 452, 25.0, '8/15/2024', 4.9),
-  createData('Eclair', 262, 16.0, '8/15/2022', 6.0),
-  createData('Frozen yoghurt', 159, 6.0, '8/18/2024', 4.0),
-  createData('Gingerbread', 356, 16.0, '10/15/2024', 3.9),
-  createData('Honeycomb', 9330629437, 3.2,'8/17/2024', 6.5),
-  createData('Ice cream sandwich', 237, 9.0, '8/25/2024', 4.3),
-  createData('Jelly Bean', 375, 0.0, '8/15/2027', 0.0),
-  createData('Oreo1', 437, 18.0, '8/27/2028', 4.0),
-  createData('KitKat', 518, 26.0, '9/10/2024', 7.0),
-  createData('Lollipop', 392, 0.2, '11/21/2024', 0.0),
-  createData('Oreo2', 437, 18.0, '12/15/2018', 4.0),
-  createData('Marshmallow', 9330629437, 0, '8/16/2029', 2.0),
-  createData('Oreo3', 437, 18.0, '5/11/2024', 4.0),
-  createData('Nougat', 360, 19.0, '7/19/2024', 37.0),
-  createData('Oreo4', 437, 18.0, '7/13/2024', 4.0),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -280,18 +243,18 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable() {
+export default function EnhancedTable({user}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('mobileNumber');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(12);
-  const url="https://billbil-api.herokuapp.com/app/v1/bills/due"
+  const url=`https://billbil-api.herokuapp.com/app/v1/bills/due?id=${user._id}`
   const [rowdata,setRowData] = React.useState([]);
   const [openPopup,setOpenPopup] = React.useState(false);
   const [popupData, setPopupData] = React.useState();
-  
+  //---------------------------------------------------------Requestes---------------------------------------------------------------
   React.useEffect(()=>{
     async function fetchData(){
         const request = await axios.get(url);

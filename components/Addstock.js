@@ -8,7 +8,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-const Addstock = ({setComponent}) => {
+const Addstock = ({setComponent, user}) => {
+  console.log(user._id);
   const url = "https://billbil-api.herokuapp.com/app/v1/add/item"
   const [data, setData] = useState({
     name:"",
@@ -41,7 +42,8 @@ const Addstock = ({setComponent}) => {
               quantity:data.qty,
               buyingPrice:data.bprice,
               sellingPrice:data.sprice,
-              unit:data.unit
+              unit:data.unit,
+              userId: user._id
             
           }
         });

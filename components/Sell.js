@@ -38,23 +38,19 @@ const top100Films = [
 
 
 const Sell = (props) => {
-  const {openPopup,setOpenPopup }= props;
+  const {openPopup,setOpenPopup,user }= props;
   const [value, setValue] = useState(null);
   const [row, setRow] = useState([]);
   const [data,setData] = React.useState({
     title:'',qty:'',price:'',discount:'',amount:''
   });
-  const [total, setTotal] = useState({
-    stotal:'',
-    tax:'',
-    mtotal:''
-  })
+  const [total, setTotal] = useState({})
 
   const [rowdata,setRowData] = React.useState([]);
 
 
   //.....................................................Requests.................................................
-  const url="https://billbil-api.herokuapp.com/app/v1/get/item"
+  const url=`https://billbil-api.herokuapp.com/app/v1/get/item?id=${user._id}`
   const url2="https://billbil-api.herokuapp.com/app/v1/sell/item"
   useEffect(()=>{
     async function fetchData(){
@@ -75,7 +71,7 @@ const Sell = (props) => {
     number:"",
     address:"",
     referral:"",
-    paidamount:"0",
+    paidamount:0,
     status:""
   })
     const defaultProps = {
@@ -176,11 +172,12 @@ const Sell = (props) => {
       })
   
       setUserData((pv)=>{
-       // //console.log(pv);
+       console.log(pv);
+       console.log(total);
         let status="-"
       
         
-        if (pv.paidamount>=total.mtotal) {
+        if ((pv.paidamount-total.mtotal)>=0) {
           status="Paid";
            
   
@@ -224,7 +221,8 @@ const Sell = (props) => {
               subtotal:total.stotal,
               tax:TAX_RATE,
               total:total.mtotal,
-              // date:new Date().toString()
+              userId: user._id,
+              date:new Date().toString()
 
           }
         });
@@ -331,14 +329,14 @@ const Sell = (props) => {
         id="disable-close-on-select"
         clearOnEscape
         onChange={(event, newValue) => {
-          console.log(newValue);
+         // console.log(newValue);
           setValue(newValue);
+          //console.log(value);
           setValue((prevalue)=>{
             
             row.title = (newValue)? newValue.name:""
             row.price = (newValue)? newValue.sellingPrice:""
             row.unit = (newValue)? newValue.unit:""
-           // row.qty = 0
            return {
             ...prevalue
            }
