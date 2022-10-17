@@ -10,7 +10,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Addstock = ({setComponent, user}) => {
   console.log(user._id);
-  const url = "https://billbil-api.herokuapp.com/app/v1/add/item"
+  //const url = "https://billbil-api.herokuapp.com/app/v1/add/item"
+  const url = "http://localhost:5000/app/v1/add/item"
   const [data, setData] = useState({
     name:"",
     qty:"",
@@ -43,7 +44,8 @@ const Addstock = ({setComponent, user}) => {
               buyingPrice:data.bprice,
               sellingPrice:data.sprice,
               unit:data.unit,
-              userId: user._id
+              userId: user._id,
+              sealler: data.pfrom
             
           }
         });
@@ -134,6 +136,11 @@ const Addstock = ({setComponent, user}) => {
         <div className="flex flex-col m-2">
           <label className="text-[#ea580c] text-xl" >Selling price</label>
           <input onChange={inputEvent} name="sprice" value={data.sprice} type="Number" className="num rounded-md text-gray-500  px-4 py-2 mt-2 outline-none  w-full border-2 border-gray-400 appearance-none" placeholder="Selling price" />
+        </div>
+
+        <div className="flex flex-col m-2">
+          <label className="text-[#ea580c] text-xl" >Purchase From </label>
+          <input onChange={inputEvent} name="pfrom" value={data.pfrom} type="String" className="num rounded-md text-gray-500  px-4 py-2 mt-2 outline-none  w-full border-2 border-gray-400 appearance-none" placeholder="purchase from " />
         </div>
         
         <div>

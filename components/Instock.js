@@ -23,6 +23,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import axios from 'axios';
 import styled from 'styled-components';
+import Popup from './Popup';
+import Instockformat from "./Instockformat"
 
 
 function descendingComparator(a, b, orderBy) {
@@ -204,6 +206,8 @@ export default function EnhancedTable({user}) {
   const [rowsPerPage, setRowsPerPage] = React.useState(12);
   const url=`https://billbil-api.herokuapp.com/app/v1/get/item?id=${user._id}`
   const [rowdata,setRowData] = React.useState([]);
+  const [openPopup,setOpenPopup] = React.useState(false);
+  const [popupData, setPopupData] = React.useState();
   //----------------------------------------------------------request------------------------------------------------------------------
   React.useEffect(()=>{
     async function fetchData(){
@@ -232,25 +236,12 @@ export default function EnhancedTable({user}) {
     setSelected([]);
   };
 
-  // const handleClick = (event, name) => {
-  //   const selectedIndex = selected.indexOf(name);
-  //   let newSelected = [];
+  const handleClick = (row) => {
+    setPopupData(row);
 
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, name);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(
-  //       selected.slice(0, selectedIndex),
-  //       selected.slice(selectedIndex + 1),
-  //     );
-  //   }
+    setOpenPopup(true);
 
-  //   setSelected(newSelected);
-  // };
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -272,6 +263,7 @@ export default function EnhancedTable({user}) {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rowdata.length) : 0;
 
   return (
+    <>
     <Box sx={{ width: '1500px', height:"100%" }} className="bg-[#272c4a] ">
       <Paper sx={{ width: '100%', mb: 2 }} className="bg-[#666b8c] p-2">
         <EnhancedTableToolbar numSelected={selected.length} />
@@ -301,7 +293,7 @@ export default function EnhancedTable({user}) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(row)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -360,6 +352,10 @@ export default function EnhancedTable({user}) {
         label="Dense padding"
       /> */}
     </Box>
+     <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} >
+     <Instockformat popupData={popupData} setOpenPopup={setOpenPopup}/>
+ </Popup>
+ </>
   );
 }
 
