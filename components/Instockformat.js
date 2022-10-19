@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Instockformat = ({popupData,setOpenPopup}) => {
   console.log(popupData);
-  const url = "https://billbil-api.herokuapp.com/app/v1/update/item?id=${popupData._id}"
+  const url = `https://billbil-api.herokuapp.com/app/v1/update/item?id=${popupData._id}`
  // const url = `http://localhost:5000/app/v1/update/item?id=${popupData._id}`
   const [input,setInput] = useState(false);
 
