@@ -10,7 +10,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Instockformat = ({popupData,setOpenPopup}) => {
-  console.log(popupData);
+ // //console.log(popupData);
   const url = `https://billbil-api.herokuapp.com/app/v1/update/item?id=${popupData._id}`
  // const url = `http://localhost:5000/app/v1/update/item?id=${popupData._id}`
   const [input,setInput] = useState(false);
@@ -69,7 +69,7 @@ const Instockformat = ({popupData,setOpenPopup}) => {
         }
         
 
-        console.log(res);
+        //console.log(res);
   }
 
   const notifySuccess = () =>{
