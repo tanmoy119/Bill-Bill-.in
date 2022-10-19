@@ -20,17 +20,18 @@ import Paper from '@mui/material/Paper';
 // ];
 
 export default function DenseTable({popupData}) {
-    const rows = popupData.items
+  console.log(popupData);
+    const rows = popupData.history
 
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell>ITEMS/PRODUCTS</TableCell>
+            <TableCell>Purchase From </TableCell>
             <TableCell align="right">QTY</TableCell>
-            <TableCell align="right">PRICE(₹)</TableCell>
-            <TableCell align="right">DISCOUNT</TableCell>
+            <TableCell align="right">BUYING PRICE</TableCell>
+            <TableCell align="right">DATE</TableCell>
             <TableCell align="right">AMOUNT</TableCell>
           </TableRow>
         </TableHead>
@@ -41,12 +42,12 @@ export default function DenseTable({popupData}) {
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.title}
+                {row.data.purchasefrom}
               </TableCell>
-              <TableCell align="right">{row.qty}</TableCell>
-              <TableCell align="right">{row.price}</TableCell>
-              <TableCell align="right">{row.discount}</TableCell>
-              <TableCell align="right">{row.amount}</TableCell>
+              <TableCell align="right">{row.data.quantity}</TableCell>
+              <TableCell align="right">{row.data.buyingPrice}</TableCell>
+              <TableCell align="right">{new Date(row.data.date).toLocaleString()}</TableCell>
+              <TableCell align="right">{row.data.totalprice}</TableCell>
             </TableRow>
           ))}
         </TableBody>

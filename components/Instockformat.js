@@ -11,50 +11,65 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Instockformat = ({popupData,setOpenPopup}) => {
   console.log(popupData);
-  const url = "https://billbil-api.herokuapp.com/app/v1/bills/update"
+  const url = "https://billbil-api.herokuapp.com/app/v1/update/item?id=${popupData._id}"
+ // const url = `http://localhost:5000/app/v1/update/item?id=${popupData._id}`
   const [input,setInput] = useState(false);
-
-  const [data, setData] = useState("");
-
-  const inputEvent = (e)=>{
-      const {name,value} = e.target;
-
-      setData((prevalue)=>{
-          return{
-              ...prevalue,
-              [name]:value
-          }
-          
-      })
-
-
-  }
 
   const close = ()=>{
     setOpenPopup(false)
     setInput(false)
   }
 
-  const submit = async (e)=>{
-    e.preventDefault();
+  const [data, setData] = useState({
+    name:popupData.name,
+    qty:popupData.quantity,
+    sprice:popupData.sellingPrice,
+    bprice:popupData.buyingPrice,
+    unit:popupData.unit,
+    pfrom:popupData.sealler
+    
+  });
 
-    const res = await axios({
-      method: 'post',
-      url: url,
-      headers: {}, 
-      data: {
-          id:popupData._id,
-          amount: data.amount
 
+  const inputEvent = (e)=>{
+    const {name,value} = e.target;
+    setData((prevalue)=>{
+       return {
+        ...prevalue,
+        [name]:value
       }
     });
-    console.log(res);
-    if(res.status==200){
-      notifySuccess();
-    }else{
-      notifyError();
-     
-    }
+  };
+
+  const submit = async (e)=>{
+    e.preventDefault();
+     const res = await axios({
+          method: 'post',
+          url: url,
+          headers: {}, 
+          data: {
+              name:data.name,
+              quantity:data.qty,
+              buyingPrice:data.bprice,
+              sellingPrice:data.sprice,
+              unit:data.unit,
+              userId: popupData.userId,
+              sealler: data.pfrom,
+              date: new Date()
+            
+          }
+        });
+        if(res.status===201){
+         
+          notifySuccess();
+        //  setTimeout(setComponent("In Stock"), 10000);
+          
+        }else{
+          notifyError(res.data.message);
+        }
+        
+
+        console.log(res);
   }
 
   const notifySuccess = () =>{
@@ -87,7 +102,7 @@ const Instockformat = ({popupData,setOpenPopup}) => {
     <div className="w-[780px] h-screen flex flex-col  ml-auto mr-auto pr-[35px] pl-[35px]  border shadow-2xl">
     <div className="h-1/2 grid grid-cols-2 gap-4">
         <div className="flex flex-col justify-center items-center  ">
-          <h1 className='text-[55px] tracking-widest font-semibold'>INVOICE</h1>
+          <h1 className='text-[55px] tracking-widest font-semibold'>LATEST</h1>
 
         <div className="flex text-sm">
           <div className="flex flex-col mr-3 ml-4">
@@ -106,8 +121,8 @@ const Instockformat = ({popupData,setOpenPopup}) => {
 
         <div className="flex flex-col justify-center pl-9  ">
          <div className="">
-          <h1 className='text-[20px]'>BILLED TO</h1>
-          <h1 >{popupData.name}</h1>
+          <h1 className='text-[20px]'>Current Price</h1>
+          <h1 >₹ {popupData.sellingPrice}</h1>
           <h1 >{popupData.address}</h1>
           <h1 >West Bengal</h1>
           <h1 >{popupData.number}</h1>
@@ -115,35 +130,64 @@ const Instockformat = ({popupData,setOpenPopup}) => {
           
         </div>
         <div className="flex flex-col justify-center  ">
-        <h1 className='font-medium m-1'>BARMAN HARDWARE & ELECTRONICS</h1>
-        <h1 className=''>Siliguri Road</h1>
-        <h1 className=''>Gumanihat, Lotapota, Cooch Behar</h1>
-        <h1 className=''>735211</h1>
-        <h1 className=''>9330629437</h1>
+        <h1 className='font-medium m-1'>{popupData.name}</h1>
+        <h1 className=''>Buying Price-{popupData.buyingPrice}</h1>
+        <h1 className=''>Selling Price-{popupData.sellingPrice}</h1>
+        <h1 className=''>Last Purchase From - {popupData.sealler}</h1>
+        <h1 className=''>In Stock - {popupData.quantity}</h1>
         <h1 className=''>barmanhardwareandelectronics@gmail.com</h1>
           
         </div>
     </div>
     <Instockformattable popupData={popupData} />
 
-    <div className="  grid grid-cols-2">
+    <div className="  grid grid-cols-1">
       <div className="flex flex-col  m-6 ">
-        <h1 className='tracking-widest'>INVOICE TOTAL</h1>
-        <h2 className='text-[30px]'>₹{popupData.total}</h2>
 
         <div className="">
           <h1 className={`text-[25px] ${(popupData.status=="Paid")?"text-green-500":(popupData.status=="Due")?"text-red-600":"text-orange-400"}`} >{popupData.status}</h1>
-          <h2 className=''>{(popupData.status=="Due")?
-          <><h2>₹{popupData.total}</h2>
+          <h2 className=''>{(popupData)?
+          <>
           {(!input)?<>
-            <button className='border  border-green-600 p-1 mt-2 rounded-md' onClick={()=>setInput(true)} >Repay Bill</button></>:<></>
+            <button className='border  border-green-600 p-1 mt-2 rounded-md' onClick={()=>setInput(true)} >EDIT</button></>:<></>
           }
           
           {(input)?<>
-          <form onSubmit={submit} className=" flex flex-col">
-            <input type="Number" className='inp border border-gray-500 appearance-none outline-none m-2' />
-            <button type='submit' className='border border-pink-600 w-1/2 p-1 rounded-lg  '>Submit</button>
-          </form>
+     <form className="grid grid-cols-3 " onSubmit={submit}>
+       
+       <div className="flex flex-col m-2 col-span-2">
+         <label className="text-[#ea580c] text-xl" >Name</label>
+         <input onChange={inputEvent} name="name" value={data.name} type="text" className="rounded-md text-gray-500  px-4 py-2 mt-2 outline-none  w-full border-2 border-gray-400 appearance-none" placeholder="Item Name" />
+       </div>
+
+       <div className="flex flex-col m-2">
+         <label className=" text-[#ea580c] text-xl" >Quantity</label>
+         <input onChange={inputEvent} name="qty" value={data.qty} type="Number" className="num rounded-md text-gray-500  px-4 py-2 mt-2 outline-none  w-full border-2 border-gray-400 appearance-none" placeholder="Quantity" />
+        
+       </div>
+       
+       
+      
+       <div className="flex flex-col m-2">
+         <label className="text-[#ea580c] text-xl" >Buying price</label>
+         <input onChange={inputEvent} name="bprice" value={data.bprice} type="Number" className="num rounded-md text-gray-500  px-4 py-2 mt-2 outline-none  w-full border-2 border-gray-400 appearance-none" placeholder="Buying price" />
+       </div>
+       
+       <div className="flex flex-col m-2">
+         <label className="text-[#ea580c] text-xl" >Selling price</label>
+         <input onChange={inputEvent} name="sprice" value={data.sprice} type="Number" className="num rounded-md text-gray-500  px-4 py-2 mt-2 outline-none  w-full border-2 border-gray-400 appearance-none" placeholder="Selling price" />
+       </div>
+
+       <div className="flex flex-col m-2">
+         <label className="text-[#ea580c] text-xl" >Purchase From </label>
+         <input onChange={inputEvent} name="pfrom" value={data.pfrom} type="String" className="num rounded-md text-gray-500  px-4 py-2 mt-2 outline-none  w-full border-2 border-gray-400 appearance-none" placeholder="purchase from " />
+       </div>
+       
+       <div>
+       <button type="submit" className="bg-green-700 hover:bg-green-600 rounded-md m-4 p-2 text-gray-300">Add</button>
+       </div>
+       
+     </form>
           </>:<></>}
           </>:(popupData.status=="Pending")?
             <><h2>₹{(popupData.total-popupData.paidAmount).toFixed(2)}</h2>
@@ -163,25 +207,6 @@ const Instockformat = ({popupData,setOpenPopup}) => {
       </div>
 
 
-      <div className="flex justify-end m-6 ">
-      <div className="flex flex-col justify-center text-right mr-6 ">
-      <h1>SUBTOTAL</h1>
-      <h1>DISCOUNT</h1>
-      <h1>(TAX RATE)</h1>
-      <h1>TAX</h1>
-      <h1>TOTAL</h1>
-      </div>
-
-      <div className="flex flex-col justify-center  ">
-      <h1>{popupData.subtotal}</h1>
-      <h1>0</h1>
-      <h1>{popupData.tax}</h1>
-      <h1>0</h1>
-      <h1>{popupData.total}</h1>
-      </div>
-
-
-      </div>
 
     </div>
     

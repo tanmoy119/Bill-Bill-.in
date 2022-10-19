@@ -52,6 +52,8 @@ const Sell = (props) => {
   //.....................................................Requests.................................................
   const url=`https://billbil-api.herokuapp.com/app/v1/get/item?id=${user._id}`
   const url2="https://billbil-api.herokuapp.com/app/v1/sell/item"
+ // const url=`http://localhost:5000/app/v1/get/item?id=${user._id}`
+ // const url2="http://localhost:5000/app/v1/sell/item"
   useEffect(()=>{
     async function fetchData(){
         const request = await axios.get(url);
